@@ -43,22 +43,22 @@ public class Table<T> {
 	}
 	
 	public void insert(T bean) {
-		try {
-			int emptyRowId = findEmptyRowId();
-			data[emptyRowId] = bean;
-			for(String col:indexConfig.getColIndexes()) {
-				Field field = bean.getClass().getDeclaredField(col);
-				field.setAccessible(true);
-		        Object value = field.get(bean);
-		        List<Integer> rows = dataMapping.get(col).get(value);
-				if(rows == null) {
-					dataMapping.get(col).put(value, new ArrayList<Integer>());
-				}
-				dataMapping.get(col).get(value).add(emptyRowId);
+		// try {
+		int emptyRowId = findEmptyRowId();
+		data[emptyRowId] = bean;
+		for(String col:indexConfig.getColIndexes()) {
+			Field field = bean.getClass().getDeclaredField(col);
+			field.setAccessible(true);
+		Object value = field.get(bean);
+		List<Integer> rows = dataMapping.get(col).get(value);
+			if(rows == null) {
+				dataMapping.get(col).put(value, new ArrayList<Integer>());
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
+			dataMapping.get(col).get(value).add(emptyRowId);
 		}
+		// } catch(Exception e) {
+		// 	e.printStackTrace();
+		// }
 	}
 	
 	public void insert(List<T> beans) {
@@ -91,25 +91,25 @@ public class Table<T> {
 	}
 	
 	public void update(T bean, Filter filter) {
-		try {
-			Map<Field, Object> fieldMap = new HashMap<Field, Object>();
-			Field[] fields = bean.getClass().getDeclaredFields();
-			for(Field field:fields) {
-				field.setAccessible(true);
-		        Object value = field.get(bean);
-		        if(value != null) {
-		        	fieldMap.put(field, value);
-		        }
-			}
-			List<T> beans = find(filter);
-			for(T t:beans) {
-				for(Entry<Field, Object> entry:fieldMap.entrySet()) {
-					entry.getKey().set(t, entry.getValue());
-				}
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
+		// try {
+		Map<Field, Object> fieldMap = new HashMap<Field, Object>();
+		Field[] fields = bean.getClass().getDeclaredFields();
+		for(Field field:fields) {
+			field.setAccessible(true);
+		Object value = field.get(bean);
+		if(value != null) {
+			fieldMap.put(field, value);
 		}
+		}
+		List<T> beans = find(filter);
+		for(T t:beans) {
+			for(Entry<Field, Object> entry:fieldMap.entrySet()) {
+				entry.getKey().set(t, entry.getValue());
+			}
+		}
+		// } catch(Exception e) {
+		// 	e.printStackTrace();
+		// }
 	}
 	
 	public void delete(Filter filter) {
