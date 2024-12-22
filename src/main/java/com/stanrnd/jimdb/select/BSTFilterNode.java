@@ -57,9 +57,9 @@ public class BSTFilterNode {
 	}
 
 	public List<Integer> process() {
-		if(leftOperand != null && rightOperand != null) {
-			List<Integer> leftList = leftOperand.process();
-			List<Integer> rightList = rightOperand.process();
+		if(this.leftOperand != null && this.rightOperand != null) {
+			List<Integer> leftList = this.leftOperand.process();
+			List<Integer> rightList = this.rightOperand.process();
 			return operation.eval(leftList, rightList);
 		}
 		return operation.eval(field, value);

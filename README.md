@@ -1,3 +1,9 @@
+CSEE 6863 
+-------------------------------
+This repo is being used as our base for CSEE 6863 Final Project
+
+---------------------------------------------------------------------
+
 JIMDB (Java In Memory DataBase)
 -------------------------------
 #### What is JIMDB? ####

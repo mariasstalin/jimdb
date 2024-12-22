@@ -20,7 +20,7 @@ public class OrOperation implements Operation {
 	}
 
 	public List<Integer> eval(List<Integer> list1, List<Integer> list2) {
-		int[] tempData = new int[operationParam.getLastRowId()+1];
+		int[] tempData = new int[this.operationParam.getLastRowId()+1];
 		for(int i=0;i<list1.size();i++) {
 			tempData[list1.get(i)]++;
 		}

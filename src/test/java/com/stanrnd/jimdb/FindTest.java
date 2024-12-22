@@ -16,7 +16,7 @@ public class FindTest {
 	private static Table<Employee> table;
 	
 	@BeforeClass
-	public static void init() {
+	public static void init() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		table = new Table<Employee>(100, new IndexConfig("department", "address", "gender"));
 		table.insert(new Employee("eid02", "Alan", "male", 20000, "HR", "Bangalore", "alan@gmail.com"));
 		table.insert(new Employee("eid18", "Krish", "male", 10000, "IT", "Bangalore", "krish@gmail.com"));
@@ -30,7 +30,7 @@ public class FindTest {
 	}
 	
 	@Test
-	public void testFindMethod() {
+	public void testFindMethod() throws IllegalArgumentException, IllegalAccessException {
 		
 		table.update(new Employee(34000, null, null), new Filter(new Filter(new Filter("department", Op.EQ, "IT"), LogOp.OR, new Filter("department", Op.EQ, "QA")), LogOp.AND, new Filter("address", Op.EQ, "Bangalore")));
 		

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project jimdb">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="/Users/aditisingh/eclipse-workspace"/>
+    <property name="dir.jarfile" value="/Users/aditisingh/git/build"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/SequentialReadsEventuallySucceed.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.stanrnd.jimdb.SequentialReadsEventuallySucceed"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.buildfile}/target/test-classes"/>
+            <fileset dir="${dir.buildfile}/target/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aditisingh/.m2/repository/junit/junit/4.4/junit-4.4.jar"/>
+        </jar>
+    </target>
+</project>

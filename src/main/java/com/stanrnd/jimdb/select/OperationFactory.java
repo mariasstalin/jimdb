@@ -20,34 +20,44 @@ public class OperationFactory {
 			break;
 		}
 		case NEQ: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case LT: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case LTE: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case GT: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case GTE: {
+			operation = new EqualOperation(operationParam);
 			break;
+			
 		}
 		case CONTAINS: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case EMPTY: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case END_WITH: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		case START_WITH: {
+			operation = new EqualOperation(operationParam);
 			break;
 		}
 		}
-		return operation;
+		return new EqualOperation(operationParam);
 	}
 
 	public Operation getOperation(LogOp operator) {
@@ -62,10 +72,11 @@ public class OperationFactory {
 			break;
 		}
 		case NOT: {
+			operation = new OrOperation(operationParam);
 			break;
 		}
 		}
-		return operation;
+		return new AndOperation(operationParam);
 	}
 	
 }

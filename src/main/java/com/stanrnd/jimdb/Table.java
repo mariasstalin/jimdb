@@ -26,7 +26,7 @@ public class Table<T> {
 
 	private IndexConfig indexConfig;
 	
-	private Object[] data;
+	public Object[] data;
 	
 	private Map<String, JimdbTreeMap<Object, List<Integer>>> dataMapping;
 	
@@ -42,26 +42,29 @@ public class Table<T> {
 		}
 	}
 	
-	public void insert(T bean) {
-		try {
-			int emptyRowId = findEmptyRowId();
-			data[emptyRowId] = bean;
-			for(String col:indexConfig.getColIndexes()) {
-				Field field = bean.getClass().getDeclaredField(col);
-				field.setAccessible(true);
-		        Object value = field.get(bean);
-		        List<Integer> rows = dataMapping.get(col).get(value);
-				if(rows == null) {
-					dataMapping.get(col).put(value, new ArrayList<Integer>());
-				}
-				dataMapping.get(col).get(value).add(emptyRowId);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
+	public void insert(T bean) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// try {
+		if (bean == null) {
+			return;
 		}
+		int emptyRowId = this.findEmptyRowId();
+		this.data[emptyRowId] = bean;
+		for(String col:indexConfig.getColIndexes()) {
+			Field field = bean.getClass().getDeclaredField(col);
+			field.setAccessible(true);
+		Object value = field.get(bean);
+		List<Integer> rows = dataMapping.get(col).get(value);
+			if(rows == null) {
+				dataMapping.get(col).put(value, new ArrayList<Integer>());
+			}
+			dataMapping.get(col).get(value).add(emptyRowId);
+		}
+		// } catch(Exception e) {
+		// 	e.printStackTrace();
+		// }
 	}
 	
-	public void insert(List<T> beans) {
+	public void insert(List<T> beans) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		for(T t:beans) {
 			insert(t);
 		}
@@ -73,11 +76,11 @@ public class Table<T> {
 		} else if(maxNoOfRows == (lastRowId+1)) {
 			System.out.println("Warn: Number of records reaches the max limit. Please increase the Max Rows for better performance.");
 			// double the data array size
+			return 1;
 		}
 		return ++lastRowId;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<T> find(Filter filter) {
 		BSTFilterNode bstFilterNode = new BSTFilterNode();
 		OperationFactory operationFactory = new OperationFactory(new OperationParam(lastRowId, maxNoOfRows, indexConfig, data, dataMapping, emptyIndexes));
@@ -90,26 +93,26 @@ public class Table<T> {
 		return results;
 	}
 	
-	public void update(T bean, Filter filter) {
-		try {
-			Map<Field, Object> fieldMap = new HashMap<Field, Object>();
-			Field[] fields = bean.getClass().getDeclaredFields();
-			for(Field field:fields) {
-				field.setAccessible(true);
-		        Object value = field.get(bean);
-		        if(value != null) {
-		        	fieldMap.put(field, value);
-		        }
-			}
-			List<T> beans = find(filter);
-			for(T t:beans) {
-				for(Entry<Field, Object> entry:fieldMap.entrySet()) {
-					entry.getKey().set(t, entry.getValue());
-				}
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
+	public void update(T bean, Filter filter) throws IllegalArgumentException, IllegalAccessException {
+		// try {
+		Map<Field, Object> fieldMap = new HashMap<Field, Object>();
+		Field[] fields = bean.getClass().getDeclaredFields();
+		for(Field field:fields) {
+			field.setAccessible(true);
+		Object value = field.get(bean);
+		if(value != null) {
+			fieldMap.put(field, value);
 		}
+		}
+		List<T> beans = find(filter);
+		for(T t:beans) {
+			for(Entry<Field, Object> entry:fieldMap.entrySet()) {
+				entry.getKey().set(t, entry.getValue());
+			}
+		}
+		// } catch(Exception e) {
+		// 	e.printStackTrace();
+		// }
 	}
 	
 	public void delete(Filter filter) {
